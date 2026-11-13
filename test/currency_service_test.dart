@@ -22,5 +22,15 @@ void main() {
       final label = CurrencyService.formatRateLabel('USD', 'GBP');
       expect(label, '1 USD = 0.7900 GBP');
     });
+
+    test('Test 11: empty input string returns 0.0 without crash.', () {
+      final parsed = CurrencyService.parseInputAmount('');
+      expect(parsed, 0.0);
+    });
+
+    test('Test 12: format converted amount rounds to 2 decimal places.', () {
+      final formatted = CurrencyService.formatConvertedAmount(126.582278);
+      expect(formatted, '126.58');
+    });
   });
 }

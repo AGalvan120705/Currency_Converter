@@ -38,11 +38,10 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
     super.dispose();
   }
 
-  // calculates conversion live on input change
+  // calculates conversion live on input change safely
   void _calculateConversion() {
-    // human hiccup: parsing directly with double.parse without tryParse
-    // will throw format exception if text is empty when user clears text box
-    final double amount = double.parse(_amountController.text);
+    // fix applied in commit 6: parseInputAmount avoids FormatException on empty text box
+    final double amount = CurrencyService.parseInputAmount(_amountController.text);
 
     setState(() {
       _convertedResult = CurrencyService.convertAmount(amount, _fromCurrency, _toCurrency);
@@ -63,7 +62,7 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
   // clear amount input text handler
   void _onClearAmount() {
     _amountController.clear();
-    // note: clearing text will trigger _calculateConversion listener and cause hiccup
+    // safely resets calculation to 0.00 without throwing format exception
   }
 
   // open rate table modal bottom sheet

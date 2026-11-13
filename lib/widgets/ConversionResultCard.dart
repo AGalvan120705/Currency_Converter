@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:currency_converter/services/CurrencyService.dart';
 
 // card widget to display final converted amount and rate statement
 class ConversionResultCard extends StatelessWidget {
@@ -28,9 +29,9 @@ class ConversionResultCard extends StatelessWidget {
               style: TextStyle(color: Colors.grey, fontSize: 14),
             ),
             const SizedBox(height: 8),
-            // unrounded value shown in commit 4 - fixed in commit 6
+            // fixed in commit 6: format to 2 decimal places using formatConvertedAmount
             Text(
-              '$convertedAmount $toCurrencyCode',
+              '${CurrencyService.formatConvertedAmount(convertedAmount)} $toCurrencyCode',
               style: const TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,

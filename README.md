@@ -9,6 +9,29 @@ A mobile app that lets users convert monetary amounts between the top 10 most tr
 
 ---
 
+## Application Screenshots & Previews
+
+### 1. Main View
+The primary screen features amount entry, currency dropdown selectors, an animated currency swap button, and instant converted total output.
+
+![Main Screen View](screenshots/main_view.png)
+
+### 2. Other Exchange Rates
+Tapping "view all rates" displays a modal bottom sheet listing exchange rates for all top 10 global currencies relative to the selected base currency.
+
+![Exchange Rates Modal Sheet](screenshots/other_rates.png)
+
+---
+
+## Automated Test Verification
+
+### 3. Test Suite Execution (12/12 Passed)
+Running `flutter test --reporter=expanded` executes all 12 unit and widget test cases covering domain models, rate calculations, input sanitisation, rounding, and widget rendering.
+
+![Automated Test Suite Success Output](screenshots/test_success.png)
+
+---
+
 ## Architecture & Code Organisation
 
 The application follows clean software engineering principles with separation of concerns:

@@ -2,11 +2,12 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:currency_converter/main.dart';
 
 void main() {
-  testWidgets('Hello World smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('Test 10: Currency converter screen loads and displays 79.0 GBP for 100 USD', (WidgetTester tester) async {
+    // build our app and trigger a frame.
+    await tester.pumpWidget(const CurrencyConverterApp());
 
-    // Verify that Hello World text is present.
-    expect(find.text('Hello World'), findsOneWidget);
+    // verify app title and default conversion result
+    expect(find.text('Currency Converter'), findsOneWidget);
+    expect(find.text('79.0 GBP'), findsOneWidget);
   });
 }

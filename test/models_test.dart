@@ -4,11 +4,11 @@ import 'package:currency_converter/models/ExchangeRates.dart';
 
 void main() {
   group('currency model tests', () {
-    test('should contain 10 currencies', () {
+    test('Test 1: should contain 10 currencies', () {
       expect(CurrencyModel.topTenCurrencies.length, 10);
     });
 
-    test('find currency by code works.', () {
+    test('Test 2: find currency by code works.', () {
       final gbp = CurrencyModel.findByCode('GBP');
       expect(gbp.name, 'British Pound');
       expect(gbp.symbol, '£');
@@ -17,17 +17,17 @@ void main() {
   });
 
   group('exchange rate matrix tests', () {
-    test('usd to gbp rate is 0.79 from brief', () {
+    test('Test 3: usd to gbp rate is 0.79 from brief', () {
       final rate = ExchangeRates.getCrossRate('USD', 'GBP');
       expect(rate, 0.79);
     });
 
-    test('gbp to usd calculates inverse ~1.2658', () {
+    test('Test 4: gbp to usd calculates inverse ~1.2658', () {
       final rate = ExchangeRates.getCrossRate('GBP', 'USD');
       expect((rate - (1.0 / 0.79)).abs() < 0.0001, true);
     });
 
-    test('same currency rate gives 1.0', () {
+    test('Test 5: same currency rate gives 1.0', () {
       final rate = ExchangeRates.getCrossRate('EUR', 'EUR');
       expect(rate, 1.0);
     });

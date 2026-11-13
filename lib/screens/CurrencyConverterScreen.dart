@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:currency_converter/models/CurrencyModel.dart';
 import 'package:currency_converter/services/CurrencyService.dart';
+import 'package:currency_converter/widgets/AmountInputCard.dart';
+import 'package:currency_converter/widgets/ConversionResultCard.dart';
 
 // main screen widget for currency converter app
 class CurrencyConverterScreen extends StatefulWidget {
@@ -57,6 +59,12 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
     _calculateConversion();
   }
 
+  // clear amount input text handler
+  void _onClearAmount() {
+    _amountController.clear();
+    // note: clearing text will trigger _calculateConversion listener and cause hiccup
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,32 +80,10 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 10),
-            // input card container
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Amount to Convert',
-                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                    ),
-                    const SizedBox(height: 10),
-                    TextField(
-                      controller: _amountController,
-                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.attach_money),
-                        hintText: 'enter amount..',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            // amount input card widget
+            AmountInputCard(
+              controller: _amountController,
+              onClear: _onClearAmount,
             ),
             const SizedBox(height: 20),
             // currency dropdown selectors and swap button row
@@ -152,37 +138,11 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
               ],
             ),
             const SizedBox(height: 30),
-            // converted result display card
-            Card(
-              color: Colors.indigo.shade50,
-              elevation: 3,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Converted Amount',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    ),
-                    const SizedBox(height: 8),
-                    // displays result - human hiccup: unrounded output shown initially
-                    Text(
-                      '$_convertedResult $_toCurrency',
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.indigo,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      _appliedRateLabel,
-                      style: const TextStyle(fontSize: 14, color: Colors.black87),
-                    ),
-                  ],
-                ),
-              ),
+            // conversion result card widget
+            ConversionResultCard(
+              convertedAmount: _convertedResult,
+              toCurrencyCode: _toCurrency,
+              rateLabel: _appliedRateLabel,
             ),
           ],
         ),

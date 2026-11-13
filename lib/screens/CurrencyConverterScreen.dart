@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:currency_converter/models/CurrencyModel.dart';
 import 'package:currency_converter/services/CurrencyService.dart';
 import 'package:currency_converter/widgets/AmountInputCard.dart';
 import 'package:currency_converter/widgets/ConversionResultCard.dart';
+import 'package:currency_converter/widgets/CurrencySelectorCard.dart';
+import 'package:currency_converter/widgets/RateTableSheet.dart';
 
 // main screen widget for currency converter app
 class CurrencyConverterScreen extends StatefulWidget {
@@ -65,6 +66,17 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
     // note: clearing text will trigger _calculateConversion listener and cause hiccup
   }
 
+  // open rate table modal bottom sheet
+  void _showRateTable() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) => RateTableSheet(baseCurrency: _fromCurrency),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,56 +98,20 @@ class _CurrencyConverterScreenState extends State<CurrencyConverterScreen> {
               onClear: _onClearAmount,
             ),
             const SizedBox(height: 20),
-            // currency dropdown selectors and swap button row
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    value: _fromCurrency,
-                    decoration: const InputDecoration(
-                      labelText: 'From',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: CurrencyModel.topTenCurrencies.map((c) {
-                      return DropdownMenuItem(
-                        value: c.code,
-                        child: Text('${c.flagEmoji} ${c.code}'),
-                      );
-                    }).toList(),
-                    onChanged: (val) {
-                      if (val != null) {
-                        setState(() => _fromCurrency = val);
-                        _calculateConversion();
-                      }
-                    },
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.swap_horiz, size: 32, color: Colors.indigo),
-                  onPressed: _swapCurrencies,
-                ),
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    value: _toCurrency,
-                    decoration: const InputDecoration(
-                      labelText: 'To',
-                      border: OutlineInputBorder(),
-                    ),
-                    items: CurrencyModel.topTenCurrencies.map((c) {
-                      return DropdownMenuItem(
-                        value: c.code,
-                        child: Text('${c.flagEmoji} ${c.code}'),
-                      );
-                    }).toList(),
-                    onChanged: (val) {
-                      if (val != null) {
-                        setState(() => _toCurrency = val);
-                        _calculateConversion();
-                      }
-                    },
-                  ),
-                ),
-              ],
+            // currency selector card widget with animated swap and view rates button
+            CurrencySelectorCard(
+              fromCurrency: _fromCurrency,
+              toCurrency: _toCurrency,
+              onFromChanged: (val) {
+                setState(() => _fromCurrency = val);
+                _calculateConversion();
+              },
+              onToChanged: (val) {
+                setState(() => _toCurrency = val);
+                _calculateConversion();
+              },
+              onSwap: _swapCurrencies,
+              onViewRates: _showRateTable,
             ),
             const SizedBox(height: 30),
             // conversion result card widget
